@@ -36,5 +36,14 @@ Route::middleware(['auth','user-role:editor'])->group(function()
 Route::middleware(['auth','user-role:admin'])->group(function()
 {
     Route::get("/admin/home",[HomeController::class,'adminHome'])->name('home.admin');
+    
 });
 
+Route::get('/newsletters', 'App\Http\Controllers\NewsletterController@index')->name('newsletters.index');
+Route::get('newsletters/create', 'App\Http\Controllers\NewsletterController@create')->name('newsletters.create');
+Route::get('newsletters/{newsletter}', 'App\Http\Controllers\NewsletterController@show')->name('newsletters.show');
+Route::post('newsletters', 'App\Http\Controllers\NewsletterController@store')->name('newsletters.store');
+Route::get('newsletters/{newsletter}/edit', 'App\Http\Controllers\NewsletterController@edit')->name('newsletters.edit');
+Route::delete('newsletters/{newsletter}', 'App\Http\Controllers\NewsletterController@destroy')->name('newsletters.destroy');
+Route::put('newsletters/{newsletter}', 'App\Http\Controllers\NewsletterController@update')->name('newsletters.update');
+Route::patch('newsletters/{newsletter}', 'App\Http\Controllers\NewsletterController@update')->name('newsletters.update');
