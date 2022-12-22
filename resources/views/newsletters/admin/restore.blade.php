@@ -4,6 +4,8 @@
 
     <div class="row justify-content-center ">
         <div class="col-md-8 ">
+
+        <a href="{{ route('newsletters.adminindex') }}"><button class="btn btn-secondary">Back to newsletters</button></a>
         @php
           $trashNewsletters = $trashNewsletters->reverse();
         @endphp

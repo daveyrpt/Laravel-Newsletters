@@ -27,12 +27,12 @@
           $dateTimeCreated = (new DateTime($newsletter->created_at))->format('Y-m-d H:i:s');
           $expiredDateTime = (new DateTime($newsletter->created_at))->add(new DateInterval('PT2M'))->format('Y-m-d H:i:s');
 
-          $newsletters = $newsletters->reverse();
+
         @endphp
             <div class="card row mt-4">
               
                 <div class="card-header">
-                    <big>{{ $newsletter->title }}</big><br>
+                    <big>{{ $newsletter->title }}</big><br><br>
                     Created on {{ $dateTimeCreated }}<br>
                     Expired in {{ $expiredDateTime }}<br>
                     <!-- Currently at {{ $currentDateTime }} -->
@@ -73,29 +73,19 @@
                     <a href="{{ route('newsletters.edit', $newsletter) }}" class=""><button class="btn btn-secondary" type="submit">Edit</button></a>
 
                     <!-- Delete Button  -->
+                    <a href="#" onclick="return confirmation()">
                     <form action="{{ route('newsletters.destroy', $newsletter) }}" class="mx-2" method="post">
                         @csrf
                         @method('delete')
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">Delete</button>
-                        <!-- Delete Button Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Delete Confirmation</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                    Are you sure want to delete this newsletter? You can restore it later on.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Proceed</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <button class="btn btn-danger" type="submit">Delete</button>
                     </form>  
+                    </a>
+                  <!-- Model Delete Confirmation -->
+                  <script type="text/javascript">
+                        function confirmation() {
+                        return confirm('Are you sure you want to remove this newsletter?');
+                        }
+                   </script>  
                </div>
 
         @endforeach

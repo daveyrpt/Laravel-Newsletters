@@ -69,7 +69,7 @@ class NewsletterController extends Controller
         $trashNewsletter->content = $newsletter->content;
         $trashNewsletter->published = $newsletter->published;
         $trashNewsletter->save();
-
+        //echo($newsletter);
         $newsletter->delete();
         return redirect()->route('newsletters.adminindex')->with('success', 'Newsletter delete successfully!');
     }
