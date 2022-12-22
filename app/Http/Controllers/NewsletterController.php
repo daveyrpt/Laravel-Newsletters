@@ -9,39 +9,27 @@ use Illuminate\Http\Request;
 class NewsletterController extends Controller
 {
 
-    /**
-     * Display a listing of the newsletters.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // User newsletter interface
     public function userindex()
     {
         $newsletters = Newsletter::all();
         return view('newsletters.user.index', compact('newsletters'));
     }
 
+    // Admin newsletter interface
     public function adminindex()
     {
         $newsletters = Newsletter::all();
         return view('newsletters.admin.index', compact('newsletters'));
     }
 
-    /**
-     * Show the form for creating a new newsletter.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Admin create newslatter interface
     public function create()
     {
         return view('newsletters.admin.create');
     }
 
-    /**
-     * Store a newly created newsletter in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // Admin create newslatter functionality
     public function store(Request $request)
     {
         $newsletter = new Newsletter;
@@ -61,22 +49,19 @@ class NewsletterController extends Controller
         }
     }
     
-    /**
-     * Display the specified newsletter.
-     *
-     * @param  \App\Newsletter  $newsletter
-     * @return \Illuminate\Http\Response
-     */
+    // Admin single newsletter interface
     public function adminshow(Newsletter $newsletter)
     {
         return view('newsletters.admin.show', compact('newsletter'));
     }
 
+    // User single newsletter interface
     public function usershow(Newsletter $newsletter)
     {
         return view('newsletters.user.show', compact('newsletter'));
     }
 
+    // Admin delete newslatter functionality
     public function destroy(Newsletter $newsletter)
     {
         $trashNewsletter = new TrashNewsletter;
@@ -89,22 +74,20 @@ class NewsletterController extends Controller
         return redirect()->route('newsletters.adminindex')->with('success', 'Newsletter delete successfully!');
     }
 
-        /**
-     * Display a listing of the newsletters.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Admin restore newslatter interface
     public function restoreView()
     {
         $trashNewsletters = TrashNewsletter::all();
         return view('newsletters.admin.restore', compact('trashNewsletters'));
     }
 
+    // Admin edit newslatter interface
     public function edit(Newsletter $newsletter)
     {
         return view('newsletters.admin.edit', compact('newsletter'));
     }
 
+    // Admin edit newslatter functionality
     public function update(Request $request, Newsletter $newsletter)
     {
             // Update the newsletter

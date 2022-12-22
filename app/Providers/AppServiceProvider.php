@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema; // 1001 add
-
+use Carbon\Carbon;
 class AppServiceProvider extends ServiceProvider
 {
     /**

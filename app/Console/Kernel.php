@@ -16,7 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            DB::table('inactive_users')->delete();
+        })->hourly();
     }
+    
 
     /**
      * Register the commands for the application.
@@ -29,4 +33,5 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+
 }
