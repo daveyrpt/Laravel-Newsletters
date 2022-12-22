@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Newsletter;
+use App\Models\TrashNewsletter;
 use Illuminate\Http\Request;
 
 class NewsletterController extends Controller
@@ -13,10 +14,16 @@ class NewsletterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function userindex()
     {
         $newsletters = Newsletter::all();
-        return view('newsletters.index', compact('newsletters'));
+        return view('newsletters.user.index', compact('newsletters'));
+    }
+
+    public function adminindex()
+    {
+        $newsletters = Newsletter::all();
+        return view('newsletters.admin.index', compact('newsletters'));
     }
 
     /**
@@ -26,7 +33,7 @@ class NewsletterController extends Controller
      */
     public function create()
     {
-        return view('newsletters.create');
+        return view('newsletters.admin.create');
     }
 
     /**
@@ -43,42 +50,71 @@ class NewsletterController extends Controller
         $newsletter->published = $request->published;
         $newsletter->save();
 
-        return redirect()->route('newsletters.index');
-    }
+        $model = TrashNewsletter::where('title', $request->title)->first();
+        echo($model);
+        if($model) {
+            $model->delete();
+            return redirect()->route('newsletters.adminindex');
 
+        } else {
+            return redirect()->route('newsletters.adminindex');
+        }
+    }
+    
     /**
      * Display the specified newsletter.
      *
      * @param  \App\Newsletter  $newsletter
      * @return \Illuminate\Http\Response
      */
-    public function show(Newsletter $newsletter)
+    public function adminshow(Newsletter $newsletter)
     {
-        return view('newsletters.show', compact('newsletter'));
+        return view('newsletters.admin.show', compact('newsletter'));
+    }
+
+    public function usershow(Newsletter $newsletter)
+    {
+        return view('newsletters.user.show', compact('newsletter'));
     }
 
     public function destroy(Newsletter $newsletter)
     {
-        $newsletter->delete();
+        $trashNewsletter = new TrashNewsletter;
+        $trashNewsletter->title = $newsletter->title;
+        $trashNewsletter->content = $newsletter->content;
+        $trashNewsletter->published = $newsletter->published;
+        $trashNewsletter->save();
 
-        return redirect()->route('newsletters.index');
+        $newsletter->delete();
+        return redirect()->route('newsletters.adminindex')->with('success', 'Newsletter delete successfully!');
+    }
+
+        /**
+     * Display a listing of the newsletters.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function restoreView()
+    {
+        $trashNewsletters = TrashNewsletter::all();
+        return view('newsletters.admin.restore', compact('trashNewsletters'));
     }
 
     public function edit(Newsletter $newsletter)
     {
-        return view('newsletters.edit', compact('newsletter'));
+        return view('newsletters.admin.edit', compact('newsletter'));
     }
 
     public function update(Request $request, Newsletter $newsletter)
     {
             // Update the newsletter
-    $newsletter->title = $request->title;
-    $newsletter->content = $request->content;
-    $newsletter->published = $request->published;
-    $newsletter->save();
+            $newsletter->title = $request->title;
+            $newsletter->content = $request->content;
+            $newsletter->published = $request->published;
+            $newsletter->save();
 
-    // Redirect the user back to the list of newsletters with a success message
-    return redirect()->route('newsletters.index')->with('success', 'Newsletter updated successfully!');
+            // Redirect the user back to the list of newsletters with a success message
+            return redirect()->route('newsletters.adminindex')->with('success', 'Newsletter updated successfully!');
     }
 
 }
