@@ -37,4 +37,6 @@ class HomeController extends Controller
     {
         return view('home',["msg"=>"I am Admin role"]);
     }
+
+
 }
